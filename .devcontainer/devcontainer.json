@@ -1,0 +1,37 @@
+{
+  "name": "wasos-toolchain",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "args": {
+      "USERNAME": "navicore"
+    }
+  },
+
+  "remoteUser": "navicore",
+
+  // Mount naviscripts live so dotfile changes are reflected immediately
+  "mounts": [
+    "source=${localEnv:HOME}/naviscripts,target=/home/navicore/naviscripts,type=bind,consistency=cached"
+  ],
+
+  // Re-run install.sh on container start to pick up any dotfile changes
+  "postStartCommand": "cd ~/naviscripts && ./install.sh",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "rust-lang.rust-analyzer",
+        "tamasfe.even-better-toml",
+        "serayuzgur.crates"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "zsh"
+      }
+    }
+  },
+
+  // Features that are hard to install via apt on Sid
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  }
+}
